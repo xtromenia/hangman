@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Hangman</title>
+</head>
+
+<body>
+    <div id="wrapper">
+
+        <div id="game">
+            
+            <div id="hangman">
+                <h1 id="word-to-guess"></h1>
+                <h1 id="life-counter"></h1>
+            </div>
+
+                <input type="text" id="guess-input" placeholder="Guess a letter" maxlength="1">
+                <input id="guess-btn" value="Guess" type="button">
+
+            <h2 id="guessed-letters-text">Guessed Letters</h2>
+            <ul id="guessed-letters">
+
+            </ul>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
