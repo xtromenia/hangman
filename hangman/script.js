@@ -1,3 +1,4 @@
+// DOM Components
 const hiddenWordDisplay = document.getElementById("word-to-guess");
 const guessedLetterList = document.getElementById("guessed-letters");
 const guessInput = document.getElementById("guess-input");
@@ -11,6 +12,7 @@ var wordToGuess;
 
 startGame();
 
+// Resets and starts game
 function startGame() {
     lives = 6;
     guessedLetters = []
@@ -23,6 +25,7 @@ function startGame() {
     printLives();
 }
 
+//Guess a word when clicking on guess button.
 guessBtn.addEventListener("click", () => {
     if (lives !== 0) {
         var guessedLetter = guessInput.value.toLowerCase();
@@ -36,12 +39,14 @@ guessBtn.addEventListener("click", () => {
     }
 });
 
+//If you press enter in the input, guess.
 guessInput.addEventListener("keyup", function(event){
     if(event.keyCode === 13){
         guessBtn.click();
     }
 });
 
+//Print the remaining amount of lives.
 function printLives() {
     lifeCounter.innerHTML = "";
     for (var i = 0; i < lives; i++) {
@@ -49,6 +54,7 @@ function printLives() {
     }
 }
 
+//Controll if the player lost or won.
 function checkConditions() {
     if (hiddenWordDisplay.innerHTML == wordToGuess) {
         guessedLettersText.innerHTML = "Congratulations, you won!";
@@ -59,12 +65,14 @@ function checkConditions() {
     }
 }
 
+//At beginning of game randomize word to pick
 function randomizeWord() {
     const wordsToGuess = ["paper", "rock", "scissor", "banana", "pear", "apple", "flingvin"];
     var randomNum = Math.floor(((Math.random() * wordsToGuess.length)));
     return wordsToGuess[randomNum];
 }
 
+//Print out letters of the hidden word, if they're guessed do not print out underscore.
 function printHiddenWord() {
     hiddenWordDisplay.innerHTML = "";
     for (let index = 0; index < wordToGuess.length; index++) {
@@ -77,6 +85,7 @@ function printHiddenWord() {
     }
 }
 
+//Everytime player guesses print out a letter to remind the player of what they've guessed on.
 function printGuessedLetters() {
     guessedLetterList.innerHTML = "";
     guessedLetters.forEach(letter => {
@@ -86,6 +95,7 @@ function printGuessedLetters() {
     });
 }
 
+//Check if the guessed letter appears in the hidden word.
 function guessLetter(letter) {
     if (!guessedLetters.includes(letter)) {
         guessedLetters.push(letter);
