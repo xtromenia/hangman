@@ -5,6 +5,11 @@ const guessInput = document.getElementById("guess-input");
 const guessBtn = document.getElementById("guess-btn");
 const guessedLettersText = document.getElementById("guessed-letters-text");
 const lifeCounter = document.getElementById("life-counter");
+const word = document.getElementById("word");
+const wordinfoWrapper = document.getElementById("wordinfo-wrapper");
+const wordDef = document.getElementById("word-def")
+const wordPhonetics = document.getElementById("word-phonetics");
+const soundPlayer = document.getElementById("sound-player");
 
 var guessedLetters;
 var lives;
@@ -13,10 +18,11 @@ var wordToGuess;
 startGame();
 
 // Resets and starts game
-function startGame() {
+async function startGame() {
+    wordinfoWrapper.style.display = "none";
     lives = 6;
     guessedLetters = []
-    wordToGuess = randomizeWord();
+    wordToGuess = await randomizeWord();
     guessedLettersText.innerHTML = "Guessed letters: "
     hiddenWordDisplay.innerHTML = "";
     guessedLetterList.innerHTML = "";
@@ -40,8 +46,8 @@ guessBtn.addEventListener("click", () => {
 });
 
 //If you press enter in the input, guess.
-guessInput.addEventListener("keyup", function(event){
-    if(event.keyCode === 13){
+guessInput.addEventListener("keyup", function (event) {
+    if (event.keyCode === 13) {
         guessBtn.click();
     }
 });
@@ -55,7 +61,7 @@ function printLives() {
 }
 
 //Controll if the player lost or won.
-function checkConditions() {
+async function checkConditions() {
     if (hiddenWordDisplay.innerHTML == wordToGuess) {
         guessedLettersText.innerHTML = "Congratulations, you won!";
         guessBtn.value = "Play Again";
@@ -63,13 +69,35 @@ function checkConditions() {
         guessedLettersText.innerHTML = "Better luck next time, you lost..."
         guessBtn.value = "Try Again";
     }
+    if (hiddenWordDisplay.innerHTML == wordToGuess || lives == 0 ) {
+        
+        word.innerText = "The word was: " + wordToGuess;
+        var wordInfo = await getWordInfo();
+
+            wordinfoWrapper.style.display = "block";
+            console.log(wordInfo);
+            wordDef.innerText = "Origin: " + wordInfo[0].origin;
+            wordPhonetics.setAttribute("src", "https:" + wordInfo[0].phonetics[0].audio)
+            soundPlayer.load();
+    
+        // else{
+        //     wordDef.innerText = "No defenition found...";
+        //     wordPhonetics.setAttribute("src","#");
+        // }
+    }
 }
 
 //At beginning of game randomize word to pick
-function randomizeWord() {
-    const wordsToGuess = ["paper", "rock", "scissor", "banana", "pear", "apple", "flingvin"];
-    var randomNum = Math.floor(((Math.random() * wordsToGuess.length)));
-    return wordsToGuess[randomNum];
+async function randomizeWord() {
+    let response = await fetch("https://random-word-api.herokuapp.com/word?number=1");
+    let data = await response.json();
+    return data[0];
+}
+
+async function getWordInfo(){
+    let response = await fetch("https://api.dictionaryapi.dev/api/v2/entries/en/"+wordToGuess);
+    let data = await response.json();
+    return data;
 }
 
 //Print out letters of the hidden word, if they're guessed do not print out underscore.
